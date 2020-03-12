@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>reCaptcha Teste</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- API recaptcha -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mb-5 mt-5">SUBSCRIBE- reCaptcha</h1>
+        <form id="subscribe">
+            <div class="form-group">
+                <label for="name">name</label>
+                <input type="text" class="form-control" id="name">
+            </div>
+            <div class="form-group">
+                <label for="email">email</label>
+                <input type="email" class="form-control" id="email">
+            </div>
+            <div class="form-group">
+                <div class="g-recaptcha" data-sitekey='6Lcf3-AUAAAAAImTr6I-TPBtRmSp7J0Tg-IrqSYM'>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <script>
+        document.querySelector('#subscribe').addEventListener('submit', submitform);
+
+        function submitform(e) {
+            e.preventDefault();
+            const name = document.querySelector('#name').value;
+            const email = document.querySelector('#email').value;
+            const captcha = document.querySelector('#g-recaptcha-response').value;
+
+            console.log('@@@@@@@ name', name)
+            console.log('@@@@@@@ email', email)
+            console.log('@@@@@@@ captcha', captcha)
+
+            fetch('/go', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json , text/plain , */*', 'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ name: name, email: email, captcha: captcha })
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(data);
+                });
+        }
+    </script>
+</body>
+
+</html>
